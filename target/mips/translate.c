@@ -2230,6 +2230,7 @@ static void gen_ld(DisasContext *ctx, uint32_t opc,
         break;
 #endif
     case OPC_LWPC:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         t1 = tcg_const_tl(pc_relative_pc(ctx));
         gen_op_addr_add(ctx, t0, t0, t1);
         tcg_temp_free(t1);
@@ -2237,6 +2238,7 @@ static void gen_ld(DisasContext *ctx, uint32_t opc,
         gen_store_gpr(t0, rt);
         break;
     case OPC_LWE:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_LW:
@@ -2245,6 +2247,7 @@ static void gen_ld(DisasContext *ctx, uint32_t opc,
         gen_store_gpr(t0, rt);
         break;
     case OPC_LHE:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_LH:
@@ -2253,6 +2256,7 @@ static void gen_ld(DisasContext *ctx, uint32_t opc,
         gen_store_gpr(t0, rt);
         break;
     case OPC_LHUE:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_LHU:
@@ -2261,6 +2265,7 @@ static void gen_ld(DisasContext *ctx, uint32_t opc,
         gen_store_gpr(t0, rt);
         break;
     case OPC_LBE:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_LB:
@@ -2268,6 +2273,7 @@ static void gen_ld(DisasContext *ctx, uint32_t opc,
         gen_store_gpr(t0, rt);
         break;
     case OPC_LBUE:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_LBU:
@@ -2278,6 +2284,7 @@ static void gen_ld(DisasContext *ctx, uint32_t opc,
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_LWL:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         t1 = tcg_temp_new();
         /* Do a byte access to possibly trigger a page
            fault with the unaligned address.  */
@@ -2304,6 +2311,7 @@ static void gen_ld(DisasContext *ctx, uint32_t opc,
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_LWR:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         t1 = tcg_temp_new();
         /* Do a byte access to possibly trigger a page
            fault with the unaligned address.  */
@@ -2332,6 +2340,7 @@ static void gen_ld(DisasContext *ctx, uint32_t opc,
         /* fall through */
     case OPC_LL:
     case R6_OPC_LL:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         op_ld_ll(t0, t0, mem_idx, ctx);
         gen_store_gpr(t0, rt);
         break;
@@ -2363,6 +2372,7 @@ static void gen_st (DisasContext *ctx, uint32_t opc, int rt,
         break;
 #endif
     case OPC_SWE:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_SW:
@@ -2370,6 +2380,7 @@ static void gen_st (DisasContext *ctx, uint32_t opc, int rt,
                            ctx->default_tcg_memop_mask);
         break;
     case OPC_SHE:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_SH:
@@ -2377,6 +2388,7 @@ static void gen_st (DisasContext *ctx, uint32_t opc, int rt,
                            ctx->default_tcg_memop_mask);
         break;
     case OPC_SBE:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_SB:
@@ -2386,12 +2398,14 @@ static void gen_st (DisasContext *ctx, uint32_t opc, int rt,
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_SWL:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         gen_helper_0e2i(swl, t1, t0, mem_idx);
         break;
     case OPC_SWRE:
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_SWR:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         gen_helper_0e2i(swr, t1, t0, mem_idx);
         break;
     }
@@ -2428,6 +2442,7 @@ static void gen_st_cond (DisasContext *ctx, uint32_t opc, int rt,
         /* fall through */
     case OPC_SC:
     case R6_OPC_SC:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         op_st_sc(t1, t0, rt, mem_idx, ctx);
         break;
     }
@@ -2440,6 +2455,7 @@ static void gen_flt_ldst (DisasContext *ctx, uint32_t opc, int ft,
                           int base, int16_t offset)
 {
     TCGv t0 = tcg_temp_new();
+    check_insn_opc_removed(ctx, INSN_BITMIPS);
 
     gen_base_offset_addr(ctx, t0, base, offset);
     /* Don't do NOP if destination is zero: we must perform the actual
@@ -2493,6 +2509,7 @@ static void gen_flt_ldst (DisasContext *ctx, uint32_t opc, int ft,
 static void gen_cop1_ldst(DisasContext *ctx, uint32_t op, int rt,
                           int rs, int16_t imm)
 {
+    check_insn_opc_removed(ctx, INSN_BITMIPS);
     if (ctx->CP0_Config1 & (1 << CP0C1_FP)) {
         check_cp1_enabled(ctx);
         switch (op) {
@@ -2688,6 +2705,7 @@ static void gen_shift_imm(DisasContext *ctx, uint32_t opc,
         }
         break;
     case OPC_ROTR:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         if (uimm != 0) {
             TCGv_i32 t1 = tcg_temp_new_i32();
 
@@ -2889,6 +2907,7 @@ static void gen_arith(DisasContext *ctx, uint32_t opc,
         break;
 #endif
     case OPC_MUL:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         if (likely(rs != 0 && rt != 0)) {
             tcg_gen_mul_tl(cpu_gpr[rd], cpu_gpr[rs], cpu_gpr[rt]);
             tcg_gen_ext32s_tl(cpu_gpr[rd], cpu_gpr[rd]);
@@ -2917,15 +2936,19 @@ static void gen_cond_move(DisasContext *ctx, uint32_t opc,
     gen_load_gpr(t2, rs);
     switch (opc) {
     case OPC_MOVN:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         tcg_gen_movcond_tl(TCG_COND_NE, cpu_gpr[rd], t0, t1, t2, cpu_gpr[rd]);
         break;
     case OPC_MOVZ:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         tcg_gen_movcond_tl(TCG_COND_EQ, cpu_gpr[rd], t0, t1, t2, cpu_gpr[rd]);
         break;
     case OPC_SELNEZ:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         tcg_gen_movcond_tl(TCG_COND_NE, cpu_gpr[rd], t0, t1, t2, t1);
         break;
     case OPC_SELEQZ:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         tcg_gen_movcond_tl(TCG_COND_EQ, cpu_gpr[rd], t0, t1, t2, t1);
         break;
     }
@@ -3047,6 +3070,7 @@ static void gen_shift(DisasContext *ctx, uint32_t opc,
         tcg_gen_ext32s_tl(cpu_gpr[rd], t0);
         break;
     case OPC_ROTRV:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         {
             TCGv_i32 t2 = tcg_temp_new_i32();
             TCGv_i32 t3 = tcg_temp_new_i32();
@@ -3546,6 +3570,7 @@ static void gen_muldiv(DisasContext *ctx, uint32_t opc,
         break;
 #endif
     case OPC_MADD:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         {
             TCGv_i64 t2 = tcg_temp_new_i64();
             TCGv_i64 t3 = tcg_temp_new_i64();
@@ -3562,6 +3587,7 @@ static void gen_muldiv(DisasContext *ctx, uint32_t opc,
         }
         break;
     case OPC_MADDU:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         {
             TCGv_i64 t2 = tcg_temp_new_i64();
             TCGv_i64 t3 = tcg_temp_new_i64();
@@ -3580,6 +3606,7 @@ static void gen_muldiv(DisasContext *ctx, uint32_t opc,
         }
         break;
     case OPC_MSUB:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         {
             TCGv_i64 t2 = tcg_temp_new_i64();
             TCGv_i64 t3 = tcg_temp_new_i64();
@@ -3596,6 +3623,7 @@ static void gen_muldiv(DisasContext *ctx, uint32_t opc,
         }
         break;
     case OPC_MSUBU:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         {
             TCGv_i64 t2 = tcg_temp_new_i64();
             TCGv_i64 t3 = tcg_temp_new_i64();
@@ -3706,6 +3734,7 @@ static void gen_cl (DisasContext *ctx, uint32_t opc,
     case OPC_DCLO:
     case R6_OPC_DCLO:
 #endif
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         tcg_gen_not_tl(t0, t0);
         break;
     }
@@ -3715,6 +3744,7 @@ static void gen_cl (DisasContext *ctx, uint32_t opc,
     case R6_OPC_CLO:
     case OPC_CLZ:
     case R6_OPC_CLZ:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         tcg_gen_ext32u_tl(t0, t0);
         tcg_gen_clzi_tl(t0, t0, TARGET_LONG_BITS);
         tcg_gen_subi_tl(t0, t0, TARGET_LONG_BITS - 32);
@@ -4188,6 +4218,7 @@ static void gen_trap (DisasContext *ctx, uint32_t opc,
                       int rs, int rt, int16_t imm)
 {
     int cond;
+    check_insn_opc_removed(ctx, INSN_BITMIPS);
     TCGv t0 = tcg_temp_new();
     TCGv t1 = tcg_temp_new();
 
@@ -4329,10 +4360,12 @@ static void gen_compute_branch (DisasContext *ctx, uint32_t opc,
 
     /* Load needed operands */
     switch (opc) {
-    case OPC_BEQ:
     case OPC_BEQL:
-    case OPC_BNE:
     case OPC_BNEL:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
+        /* fallthrough */
+    case OPC_BEQ:
+    case OPC_BNE:
         /* Compare two registers */
         if (rs != rt) {
             gen_load_gpr(t0, rs);
@@ -4341,18 +4374,20 @@ static void gen_compute_branch (DisasContext *ctx, uint32_t opc,
         }
         btgt = ctx->pc + insn_bytes + offset;
         break;
-    case OPC_BGEZ:
-    case OPC_BGEZAL:
     case OPC_BGEZALL:
     case OPC_BGEZL:
-    case OPC_BGTZ:
     case OPC_BGTZL:
-    case OPC_BLEZ:
     case OPC_BLEZL:
-    case OPC_BLTZ:
-    case OPC_BLTZAL:
     case OPC_BLTZALL:
     case OPC_BLTZL:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
+        /* fallthrough */
+    case OPC_BGEZ:
+    case OPC_BGEZAL:
+    case OPC_BGTZ:
+    case OPC_BLEZ:
+    case OPC_BLTZ:
+    case OPC_BLTZAL:
         /* Compare to zero */
         if (rs != 0) {
             gen_load_gpr(t0, rs);
@@ -4367,12 +4402,14 @@ static void gen_compute_branch (DisasContext *ctx, uint32_t opc,
 #else
         tcg_gen_andi_tl(t0, cpu_dspctrl, 0x3F);
 #endif
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         bcond_compute = 1;
         btgt = ctx->pc + insn_bytes + offset;
         break;
+    case OPC_JALX:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
     case OPC_J:
     case OPC_JAL:
-    case OPC_JALX:
         /* Jump to immediate */
         btgt = ((ctx->pc + insn_bytes) & (int32_t)0xF0000000) | (uint32_t)offset;
         break;
@@ -4558,6 +4595,7 @@ static void gen_compute_branch (DisasContext *ctx, uint32_t opc,
 static void gen_bitops (DisasContext *ctx, uint32_t opc, int rt,
                         int rs, int lsb, int msb)
 {
+    check_insn_opc_removed(ctx, INSN_BITMIPS);
     TCGv t0 = tcg_temp_new();
     TCGv t1 = tcg_temp_new();
 
@@ -4706,6 +4744,7 @@ static void gen_lsa(DisasContext *ctx, int opc, int rd, int rs, int rt,
 {
     TCGv t0;
     TCGv t1;
+    check_insn_opc_removed(ctx, INSN_BITMIPS);
     if (rd == 0) {
         /* Treat as NOP. */
         return;
@@ -4730,6 +4769,7 @@ static void gen_align(DisasContext *ctx, int opc, int rd, int rs, int rt,
                       int bp)
 {
     TCGv t0;
+    check_insn_opc_removed(ctx, INSN_BITMIPS);
     if (rd == 0) {
         /* Treat as NOP. */
         return;
@@ -4777,6 +4817,7 @@ static void gen_align(DisasContext *ctx, int opc, int rd, int rs, int rt,
 static void gen_bitswap(DisasContext *ctx, int opc, int rd, int rt)
 {
     TCGv t0;
+    check_insn_opc_removed(ctx, INSN_BITMIPS);
     if (rd == 0) {
         /* Treat as NOP. */
         return;
