@@ -150,6 +150,16 @@ static void mipsnet_init(int base, qemu_irq irq, NICInfo *nd)
                                 sysbus_mmio_get_region(s, 0));
 }
 
+#define MEMORY_ALIAS(src, dst, size) \
+        { \
+            MemoryRegion *al = g_new(MemoryRegion, 1); \
+            memory_region_init_alias(al, NULL, \
+                    "bitmips.aliased_" #src "_to_" #dst "_" # size , \
+                    get_system_memory(), src, size); \
+            memory_region_add_subregion_overlap(get_system_memory(), \
+                    dst, al, 100); \
+        }
+
 static void
 mips_mipssim_init(MachineState *machine)
 {
@@ -224,9 +234,18 @@ mips_mipssim_init(MachineState *machine)
     cpu_mips_clock_init(cpu);
 
     /* UART 16550 */
-    if (serial_hds[0])
+    if (serial_hds[0]) {
         serial_init(0x10000000, env->irq[2], 115200, serial_hds[0],
                     get_system_memory());
+        MEMORY_ALIAS(0x10000000, 0x10001000, 1);
+        MEMORY_ALIAS(0x10000001, 0x10001004, 1);
+        MEMORY_ALIAS(0x10000002, 0x10001008, 1);
+        MEMORY_ALIAS(0x10000003, 0x1000100c, 1);
+        MEMORY_ALIAS(0x10000004, 0x10001010, 1);
+        MEMORY_ALIAS(0x10000005, 0x10001014, 1);
+        MEMORY_ALIAS(0x10000006, 0x10001018, 1);
+        MEMORY_ALIAS(0x10000007, 0x1000101c, 1);
+    }
 
     /* NIC */
     if (nd_table[0].used)
