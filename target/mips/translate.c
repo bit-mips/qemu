@@ -2281,10 +2281,10 @@ static void gen_ld(DisasContext *ctx, uint32_t opc,
         gen_store_gpr(t0, rt);
         break;
     case OPC_LWLE:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_LWL:
-        check_insn_opc_removed(ctx, INSN_BITMIPS);
         t1 = tcg_temp_new();
         /* Do a byte access to possibly trigger a page
            fault with the unaligned address.  */
@@ -2308,10 +2308,10 @@ static void gen_ld(DisasContext *ctx, uint32_t opc,
         gen_store_gpr(t0, rt);
         break;
     case OPC_LWRE:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_LWR:
-        check_insn_opc_removed(ctx, INSN_BITMIPS);
         t1 = tcg_temp_new();
         /* Do a byte access to possibly trigger a page
            fault with the unaligned address.  */
@@ -2395,17 +2395,17 @@ static void gen_st (DisasContext *ctx, uint32_t opc, int rt,
         tcg_gen_qemu_st_tl(t1, t0, mem_idx, MO_8);
         break;
     case OPC_SWLE:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_SWL:
-        check_insn_opc_removed(ctx, INSN_BITMIPS);
         gen_helper_0e2i(swl, t1, t0, mem_idx);
         break;
     case OPC_SWRE:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         mem_idx = MIPS_HFLAG_UM;
         /* fall through */
     case OPC_SWR:
-        check_insn_opc_removed(ctx, INSN_BITMIPS);
         gen_helper_0e2i(swr, t1, t0, mem_idx);
         break;
     }
