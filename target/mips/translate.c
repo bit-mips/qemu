@@ -5076,7 +5076,7 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
     const char *rn = "invalid";
 
     if (sel != 0)
-        check_insn(ctx, ISA_MIPS32);
+        check_insn(ctx, ISA_MIPS32 | INSN_BITMIPS);
 
     switch (reg) {
     case 0:
@@ -5415,12 +5415,12 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
             rn = "Status";
             break;
         case 1:
-            check_insn(ctx, ISA_MIPS32R2);
+            check_insn(ctx, ISA_MIPS32R2 | INSN_BITMIPS);
             gen_mfc0_load32(arg, offsetof(CPUMIPSState, CP0_IntCtl));
             rn = "IntCtl";
             break;
         case 2:
-            check_insn(ctx, ISA_MIPS32R2);
+            check_insn(ctx, ISA_MIPS32R2 | INSN_BITMIPS);
             gen_mfc0_load32(arg, offsetof(CPUMIPSState, CP0_SRSCtl));
             rn = "SRSCtl";
             break;
@@ -5461,7 +5461,7 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
             rn = "PRid";
             break;
         case 1:
-            check_insn(ctx, ISA_MIPS32R2);
+            check_insn(ctx, ISA_MIPS32R2 | INSN_BITMIPS);
             tcg_gen_ld_tl(arg, cpu_env, offsetof(CPUMIPSState, CP0_EBase));
             tcg_gen_ext32s_tl(arg, arg);
             rn = "EBase";
@@ -5517,6 +5517,7 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 17:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
             gen_helper_mfc0_lladdr(arg, cpu_env);
@@ -5537,6 +5538,7 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 18:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0 ... 7:
             gen_helper_1e0i(mfc0_watchlo, arg, sel);
@@ -5547,6 +5549,7 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 19:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0 ...7:
             gen_helper_1e0i(mfc0_watchhi, arg, sel);
@@ -5557,6 +5560,7 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 20:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
 #if defined(TARGET_MIPS64)
@@ -5572,6 +5576,7 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         break;
     case 21:
        /* Officially reserved, but sel 0 is used for R1x000 framemask */
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         CP0_CHECK(!(ctx->insn_flags & ISA_MIPS32R6));
         switch (sel) {
         case 0:
@@ -5583,10 +5588,12 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 22:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         tcg_gen_movi_tl(arg, 0); /* unimplemented */
         rn = "'Diagnostic"; /* implementation dependent */
         break;
     case 23:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
             gen_helper_mfc0_debug(arg, cpu_env); /* EJTAG support */
@@ -5613,6 +5620,7 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 24:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
             /* EJTAG support */
@@ -5625,6 +5633,7 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 25:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
             gen_mfc0_load32(arg, offsetof(CPUMIPSState, CP0_Performance0));
@@ -5663,6 +5672,7 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 26:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
             gen_mfc0_load32(arg, offsetof(CPUMIPSState, CP0_ErrCtl));
@@ -5673,6 +5683,7 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 27:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0 ... 3:
             tcg_gen_movi_tl(arg, 0); /* unimplemented */
@@ -5683,6 +5694,7 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 28:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
         case 2:
@@ -5708,6 +5720,7 @@ static void gen_mfc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 29:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
         case 2:
@@ -5772,7 +5785,7 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
     const char *rn = "invalid";
 
     if (sel != 0)
-        check_insn(ctx, ISA_MIPS32);
+        check_insn(ctx, ISA_MIPS32 | INSN_BITMIPS);
 
     if (tb_cflags(ctx->tb) & CF_USE_ICOUNT) {
         gen_io_start();
@@ -6075,14 +6088,14 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
             rn = "Status";
             break;
         case 1:
-            check_insn(ctx, ISA_MIPS32R2);
+            check_insn(ctx, ISA_MIPS32R2 | INSN_BITMIPS);
             gen_helper_mtc0_intctl(cpu_env, arg);
             /* Stop translation as we may have switched the execution mode */
             ctx->bstate = BS_STOP;
             rn = "IntCtl";
             break;
         case 2:
-            check_insn(ctx, ISA_MIPS32R2);
+            check_insn(ctx, ISA_MIPS32R2 | INSN_BITMIPS);
             gen_helper_mtc0_srsctl(cpu_env, arg);
             /* Stop translation as we may have switched the execution mode */
             ctx->bstate = BS_STOP;
@@ -6132,7 +6145,7 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
             rn = "PRid";
             break;
         case 1:
-            check_insn(ctx, ISA_MIPS32R2);
+            check_insn(ctx, ISA_MIPS32R2 | INSN_BITMIPS);
             gen_helper_mtc0_ebase(cpu_env, arg);
             rn = "EBase";
             break;
@@ -6190,6 +6203,7 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 17:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
             gen_helper_mtc0_lladdr(cpu_env, arg);
@@ -6210,6 +6224,7 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 18:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0 ... 7:
             gen_helper_0e1i(mtc0_watchlo, arg, sel);
@@ -6220,6 +6235,7 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 19:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0 ... 7:
             gen_helper_0e1i(mtc0_watchhi, arg, sel);
@@ -6230,6 +6246,7 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 20:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
 #if defined(TARGET_MIPS64)
@@ -6244,6 +6261,7 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         break;
     case 21:
        /* Officially reserved, but sel 0 is used for R1x000 framemask */
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         CP0_CHECK(!(ctx->insn_flags & ISA_MIPS32R6));
         switch (sel) {
         case 0:
@@ -6255,10 +6273,12 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 22:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         /* ignored */
         rn = "Diagnostic"; /* implementation dependent */
         break;
     case 23:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
             gen_helper_mtc0_debug(cpu_env, arg); /* EJTAG support */
@@ -6298,6 +6318,7 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 24:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
             /* EJTAG support */
@@ -6309,6 +6330,7 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 25:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
             gen_helper_mtc0_performance0(cpu_env, arg);
@@ -6347,6 +6369,7 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
        break;
     case 26:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
             gen_helper_mtc0_errctl(cpu_env, arg);
@@ -6358,6 +6381,7 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 27:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0 ... 3:
             /* ignored */
@@ -6368,6 +6392,7 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
        break;
     case 28:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
         case 2:
@@ -6388,6 +6413,7 @@ static void gen_mtc0(DisasContext *ctx, TCGv arg, int reg, int sel)
         }
         break;
     case 29:
+        check_insn_opc_removed(ctx, INSN_BITMIPS);
         switch (sel) {
         case 0:
         case 2:
