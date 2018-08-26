@@ -8367,7 +8367,7 @@ static void gen_cp0 (CPUMIPSState *env, DisasContext *ctx, uint32_t opc, int rt,
             } else {
                 /* OPC_ERET */
                 opn = "eret";
-                check_insn(ctx, ISA_MIPS2);
+                check_insn(ctx, ISA_MIPS2 | INSN_BITMIPS);
                 gen_helper_eret(cpu_env);
             }
             ctx->bstate = BS_EXCP;
