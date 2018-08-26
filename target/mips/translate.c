@@ -1850,6 +1850,7 @@ static inline void check_dspr2(DisasContext *ctx)
 static inline void check_insn(DisasContext *ctx, int flags)
 {
     if (unlikely(!(ctx->insn_flags & flags))) {
+        fprintf(stderr, "QEMU check_insn: invalid instruction at pc = %08x\n", ctx->pc);
         generate_exception_end(ctx, EXCP_RI);
     }
 }
@@ -1860,6 +1861,7 @@ static inline void check_insn(DisasContext *ctx, int flags)
 static inline void check_insn_opc_removed(DisasContext *ctx, int flags)
 {
     if (unlikely(ctx->insn_flags & flags)) {
+        fprintf(stderr, "QEMU check_insn_opc_removed: invalid instruction at pc = %08x\n", ctx->pc);
         generate_exception_end(ctx, EXCP_RI);
     }
 }
